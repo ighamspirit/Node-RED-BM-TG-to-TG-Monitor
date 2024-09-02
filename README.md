@@ -44,3 +44,9 @@ Dieser Node-RED-Flow überwacht eine spezifische DMR-Talkgroup (in diesem Beispi
 1. **Telegram Output Node**: Konfiguriere den Telegram Output Node in Node-RED mit dem Bot-Token und der Ziel-Chat-ID oder dem Channel-Benutzernamen (`chatId`).
 2. **Talkgroup ID**: Stelle sicher, dass die `targetTalkgroupID` im Function Node auf die richtige Talkgroup-ID gesetzt ist, die du überwachen möchtest.
 3. **Chat-ID oder Channel-Benutzername**: Ändere `chatId: '@TG264555'` im Function Node auf den tatsächlichen Channel-Benutzernamen oder die Gruppe, an die die Nachricht gesendet werden soll.
+
+## Infos
+Dieser Flow wurde im Rahmen der Aktivitäten von [https://www.ighamspirit.de/ IG Hamspirit e.V.] entwickelt, einem engagierten Amateurfunkverein, der sich der Förderung des Amateurfunks und der Unterstützung seiner Mitglieder widmet. 
+
+73!
+Denis Apel, DO7TC
