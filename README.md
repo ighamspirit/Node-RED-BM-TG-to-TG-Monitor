@@ -3,7 +3,7 @@
 
 ## Beschreibung
 
-Dieser Node-RED-Flow überwacht eine spezifische DMR-Talkgroup (in diesem Beispiel die Talkgroup mit der ID `264555`). Der Flow filtert eingehende Nachrichten basierend auf verschiedenen Kriterien, formatiert die relevanten Informationen und sendet sie dann als Telegram-Nachricht an einen angegebenen Telegram-Channel oder eine Gruppe. Der Flow verwendet einen Cooldown-Mechanismus, um zu verhindern, dass wiederholte Nachrichten innerhalb von 5 Minuten gesendet werden.
+Dieser Node-RED-Flow überwacht eine spezifische DMR-Talkgroup (in diesem Beispiel die Talkgroup mit der ID `264555`). Der Flow filtert eingehende Nachrichten basierend auf verschiedenen Kriterien, formatiert die relevanten Informationen und sendet sie dann als Telegram-Nachricht an einen angegebenen Telegram-Channel oder eine Gruppe. Der Flow verwendet einen Cooldown-Mechanismus, um zu verhindern, dass wiederholte Nachrichten innerhalb von 3 Minuten gesendet werden.
 
 ### Hauptfunktionen
 
