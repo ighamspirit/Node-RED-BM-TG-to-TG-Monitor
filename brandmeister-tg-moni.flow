@@ -1,0 +1,139 @@
+[
+    {
+        "id": "74b79d3242bca6cd",
+        "type": "tab",
+        "label": "IGH DMR-Monitor",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1358d680e21e2262",
+        "type": "websocket in",
+        "z": "74b79d3242bca6cd",
+        "name": "Brandmeister WebSocket",
+        "server": "",
+        "client": "87c63e07a67ad0aa",
+        "x": 170,
+        "y": 200,
+        "wires": [
+            [
+                "9cb71783c62a611d",
+                "5deba19fee871003"
+            ]
+        ]
+    },
+    {
+        "id": "9cb71783c62a611d",
+        "type": "function",
+        "z": "74b79d3242bca6cd",
+        "name": "Analyse des Socket-Steams",
+        "func": "const targetTalkgroupID = 264555;  // Die Talkgruppe, auf die wir hören möchten\nconst cooldown = 5 * 60 * 1000;  // 5 Minuten in Millisekunden\n\n// Objekt zur Speicherung der letzten gesendeten Zeitstempel\ncontext.lastSent = context.lastSent || {};\n\nif (!msg.payload || typeof msg.payload !== 'string') {\n    return null;  // Keine gültigen Daten, also Abbruch\n}\n\ntry {\n    const match = msg.payload.match(/\"payload\":\"(.*?)\"\\}]/);\n    if (!match || match.length < 2) {\n        return null;\n    }\n\n    const jsonString = match[1].replace(/\\\\\"/g, '\"');\n    const parsedData = JSON.parse(jsonString);\n    const destinationID = parsedData.DestinationID;\n    const sourceCall = parsedData.SourceCall || null;\n    const sourceID = parsedData.SourceID || \"unknown\";\n    const sourceName = parsedData.SourceName || \"Unbekannt\";\n\n    // Ignoriere Nachrichten ohne Rufzeichen\n    if (!sourceCall) {\n        return null;  // Nachricht ignorieren, wenn kein Rufzeichen vorhanden ist\n    }\n\n    if (destinationID === targetTalkgroupID) {\n        const now = Date.now();\n        const lastSent = context.lastSent[sourceID] || 0;\n\n        // Prüfen, ob 5 Minuten seit der letzten Nachricht vergangen sind\n        if (now - lastSent < cooldown) {\n            return null;  // Cooldown ist aktiv, Nachricht ignorieren\n        }\n\n        // Aktualisiere den Zeitstempel\n        context.lastSent[sourceID] = now;\n\n        let output = \"\";\n\n        // Erste Zeile: Call mit Link, Name (Unbekannt, wenn nicht vorhanden) und User ID mit Link in Klammern\n        output += `📻 [${sourceCall}](https://www.qrz.com/lookup/${sourceCall}) - 👤 **${sourceName}** ([${sourceID}](https://radioid.net/database/view?id=${sourceID}))\\n`;\n\n        // RSSI und HotSpot nebeneinander mit Sendesignal-Icon\n        if (parsedData.RSSI !== undefined && parsedData.RSSI !== null && parsedData.LinkName) {\n            output += `📡 RSSI: ${parsedData.RSSI} dBm - HotSpot: ${parsedData.LinkName}\\n`;\n        } else if (parsedData.RSSI !== undefined && parsedData.RSSI !== null) {\n            output += `📡 RSSI: ${parsedData.RSSI} dBm\\n`;\n        } else if (parsedData.LinkName) {\n            output += `📡 HotSpot: ${parsedData.LinkName}\\n`;\n        }\n\n        // Dritte Zeile: Talker Alias mit Info-Symbol\n        if (parsedData.TalkerAlias) {\n            output += `ℹ️ Talker Alias: **${parsedData.TalkerAlias}**\\n`;\n        }\n\n        msg.payload = {\n            chatId: '@TG264555',  // Ersetze durch den tatsächlichen Channel-Benutzernamen oder die Chat-ID\n            type: 'message',\n            options: {\n                parse_mode: 'Markdown',  // Telegram Markdown-Modus aktivieren\n            },\n            content: output.trim()\n        };\n\n        return msg;  // Nachricht weitergeben, um sie im Telegram Node zu senden\n    } else {\n        return null;  // Nachricht ignorieren, wenn sie nicht von der gewünschten Talkgroup kommt\n    }\n\n} catch (err) {\n    node.warn(\"Fehler beim Parsen der empfangenen Daten: \" + err.message);\n    return null;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 200,
+        "wires": [
+            [
+                "63dd83219f3233d2",
+                "edcad18aaeec3158"
+            ]
+        ]
+    },
+    {
+        "id": "63dd83219f3233d2",
+        "type": "debug",
+        "z": "74b79d3242bca6cd",
+        "name": "Analyse-Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "5deba19fee871003",
+        "type": "debug",
+        "z": "74b79d3242bca6cd",
+        "name": "Socket-Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "edcad18aaeec3158",
+        "type": "telegram sender",
+        "z": "74b79d3242bca6cd",
+        "name": "",
+        "bot": "06c30b8053c5ecc7",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 750,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cf49092d6674140f",
+        "type": "comment",
+        "z": "74b79d3242bca6cd",
+        "name": "IGH e.V. Brandmeister Talkgroup Monitor",
+        "info": "",
+        "x": 220,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "87c63e07a67ad0aa",
+        "type": "websocket-client",
+        "path": "wss://api.brandmeister.network/lh/socket.io/?transport=websocket",
+        "tls": "",
+        "wholemsg": "false",
+        "hb": "15",
+        "subprotocol": "websocket"
+    },
+    {
+        "id": "06c30b8053c5ecc7",
+        "type": "telegram bot",
+        "botname": "igh_wx_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "updatemode": "polling",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    }
+]
