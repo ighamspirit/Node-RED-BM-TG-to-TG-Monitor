@@ -34,6 +34,8 @@ Dieser Node-RED-Flow überwacht eine spezifische DMR-Talkgroup (in diesem Beispi
    - Die formatierte Nachricht wird an den angegebenen Telegram-Channel oder die Gruppe gesendet.
    - Die Nachricht wird im Markdown-Format gesendet, um sicherzustellen, dass Links klickbar und Textformatierungen korrekt sind.
 
+![Benachrichtigung](Node-RED_IGH_DMR-Monitor_msg.png)
+
 ## Voraussetzungen
 
 - **Node-RED**: Dieser Flow läuft auf einer Node-RED-Instanz.
