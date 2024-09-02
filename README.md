@@ -26,7 +26,7 @@ Dieser Node-RED-Flow überwacht eine spezifische DMR-Talkgroup (in diesem Beispi
    - Wenn innerhalb der letzten 5 Minuten bereits eine Nachricht von derselben User ID gesendet wurde, wird die neue Nachricht ignoriert.
    
 4. **Nachrichtenformatierung**:
-   - **Erste Zeile**: Zeigt das Rufzeichen als klickbaren Link an. Der Name wird fett formatiert und als "Unbekannt" angezeigt, wenn kein Name vorhanden ist. Die User ID wird in Klammern angezeigt, ebenfalls als klickbarer Link.
+   - **Erste Zeile**: Zeigt das Rufzeichen als klickbaren Link zu QRZ.com an. Der Name wird fett formatiert und als "Unbekannt" angezeigt, wenn kein Name vorhanden ist. Die User ID wird in Klammern angezeigt, ebenfalls als klickbarer Link zur radioid.net Datenbank.
    - **Zweite Zeile**: RSSI und HotSpot werden nebeneinander angezeigt, jeweils mit einem Sendesignal-Icon (`📡`).
    - **Dritte Zeile**: Der Talker Alias wird fett formatiert und mit einem Info-Symbol (`ℹ️`) angezeigt.
 
